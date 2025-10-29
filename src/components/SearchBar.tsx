@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-export default function SearchBar(props: {searchTerm: string; onSearch: (query: string) => void}) {
-    const { searchTerm, onSearch } = props;
+export default function SearchBar(props: { onSearch: (query: string) => void}) {
+    const { onSearch } = props;
     const [term, setTerm] = useState("");
 
-    useEffect(() => {
-        setTerm(searchTerm);
-    }, [searchTerm]);
+    // useEffect(() => {
+    //     setTerm(searchTerm);
+    // }, [searchTerm]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

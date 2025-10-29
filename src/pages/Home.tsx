@@ -6,11 +6,11 @@ import SearchBar from "../components/SearchBar";
 
 export default function Home() {
     const [page, setPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
+    const [activeQuery, setActiveQuery] = useState("");
     const { data, isLoading, isError, error } = useQuery<MovieResponse, Error>({
-        queryKey: ["movies", searchTerm, page],
-        queryFn: () => searchMoviesByTitle(searchTerm, page),
-        enabled: !!searchTerm.trim(),
+        queryKey: ["movies", activeQuery, page],
+        queryFn: () => searchMoviesByTitle(activeQuery, page),
+        enabled: !!activeQuery.trim(),
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,
         retry: false,
@@ -25,14 +25,14 @@ export default function Home() {
             <h1>Movies</h1>
 
             <SearchBar
-                searchTerm={searchTerm}
+                // searchTerm={searchTerm}
                 onSearch={(query: string) => {
-                    setSearchTerm(query);
+                    setActiveQuery(query);
                     setPage(1); 
                 }}
             />
 
-            {!searchTerm ? (
+            {!activeQuery ? (
                 <p style={{ fontStyle: "italic", color: "#555" }}>
                     Please search for a movie to begin.
                 </p>
