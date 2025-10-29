@@ -2,29 +2,26 @@ import React, { useEffect, useState } from "react";
 
 export default function SearchBar(props: { onSearch: (query: string) => void}) {
     const { onSearch } = props;
-    const [term, setTerm] = useState("");
+    const [movieTitle, setMovieTitle] = useState("");
 
-    // useEffect(() => {
-    //     setTerm(searchTerm);
-    // }, [searchTerm]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (term.trim()) {
-            onSearch(term);
+        if (movieTitle.trim()) {
+            onSearch(movieTitle);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ marginBottom: "20px" }}>
+        <form onSubmit={handleSubmit} className="search-form">
             <input
                 type="text"
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
+                value={movieTitle}
+                onChange={(e) => setMovieTitle(e.target.value)}
                 placeholder="Search movies"
-                style={{ padding: "8px", width: "250px" }}
+                className="search-input"
             />
-            <button type="submit" style={{marginLeft: "10px", padding: "8px 12px", cursor: "pointer"}}>
+            <button type="submit" className="search-button">
                 Search
             </button>
         </form>

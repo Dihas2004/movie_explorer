@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { searchMoviesByTitle } from "../api/omdb-api";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MovieResponse } from "../types/movieTypes";
 import SearchBar from "../components/SearchBar";
+import MovieCard from "../components/MovieCard";
 
 export default function Home() {
+    const queryClient = useQueryClient();
     const [page, setPage] = useState(1);
     const [activeQuery, setActiveQuery] = useState("");
     const { data, isLoading, isError, error } = useQuery<MovieResponse, Error>({
@@ -21,47 +23,61 @@ export default function Home() {
     const hasPrevPage = page > 1;
 
     return (
-        <div style={{ padding: "20px" }}>
-            <h1>Movies</h1>
+        <div className="home-container">
+            <h1 className="home-title">Movies</h1>
 
             <SearchBar
-                // searchTerm={searchTerm}
-                onSearch={(query: string) => {
+                onSearch={async (query: string) => {
                     setActiveQuery(query);
                     setPage(1); 
+                    const queryKey = ["movies", query, 1];
+                    const queryInfo = queryClient.getQueryState(queryKey);
+
+                    const isStale = !queryInfo ||(queryInfo.dataUpdatedAt && Date.now() - queryInfo.dataUpdatedAt > 5 * 60 * 1000);
+
+                    const isFetching = queryInfo?.fetchStatus === "fetching";
+
+                    if (isStale && !isFetching) {
+                        console.log("refetching from network");
+                        await queryClient.invalidateQueries({ queryKey });
+                    } else if (isFetching) {
+                        console.log("fetching in progress");
+                    } 
+                    // else {
+                    //     console.log("using cache");
+                    // }
                 }}
             />
 
             {!activeQuery ? (
-                <p style={{ fontStyle: "italic", color: "#555" }}>
-                    Please search for a movie to begin.
-                </p>
+                <p className="info-text">Please search for a movie to begin.</p>
             ) : isLoading ? (
-                <p>Loading...</p>
+                <p className="info-text">Loading...</p>
             ) : isError ? (
-                <p>Error: {(error as Error).message}</p>
+                <p className="error-text">Error: {(error as Error).message}</p>
             ) : data?.movies?.length ? (
                 <>
-                    <ul>
+                    <div className="movies-grid">
                         {data.movies.map((movie, index) => (
-                            <li key={`${movie.imdbID}-${page}-${index}`}>
-                                {movie.Title} ({movie.Year})
-                            </li>
+                            <MovieCard
+                                key={`${movie.imdbID}-${page}-${index}`}
+                                movie={movie}
+                            />
                         ))}
-                    </ul>
+                    </div>
 
-                    <div style={{ marginTop: "20px" }}>
+                    <div className="pagination">
                         <button disabled={!hasPrevPage} onClick={() => setPage(page - 1)}>
                             Previous
                         </button>
-                        <span style={{ margin: "0 10px" }}>Page {page}</span>
+                        <span>Page {page}</span>
                         <button disabled={!hasNextPage} onClick={() => setPage(page + 1)}>
                             Next
                         </button>
                     </div>
                 </>
             ) : (
-                <p>No results found.</p>
+                <p className="info-text">No results found.</p>
             )}
 
         </div>
