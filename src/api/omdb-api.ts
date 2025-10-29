@@ -18,10 +18,12 @@ export async function searchMoviesByTitle(movieTitle: string,page: number): Prom
         if (data.Response === "False") {
             throw new Error("No results found.");
         }
-        return {
-            movies: data.Search as Movie[],
-            totalResults: parseInt(data.totalResults, 10),
-        };
+        // return {
+        //     movies: data.Search as Movie[],
+        //     totalResults: parseInt(data.totalResults, 10),
+        // };
+        const movieResponseResult: MovieResponse = { movies: data.Search as Movie[], totalResults: Number(data.totalResults) };
+        return movieResponseResult
     } catch (error) {
         console.error("Error fetching movies:", error);
         throw error;
