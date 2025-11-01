@@ -4,6 +4,12 @@ export interface Movie {
     imdbID: string;
     Type: string;
     Poster: string;
+    Genre?: string;
+    Director?: string;
+    Actors?: string;
+    Plot?: string;
+    Runtime?: string;
+    imdbRating?: string;
 }
 
 export interface MovieResponse {

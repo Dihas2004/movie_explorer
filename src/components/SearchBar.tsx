@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-export default function SearchBar(props: { onSearch: (query: string) => void}) {
+export default function SearchBar(props: { onSearch: (query: string) => void; defaultValue?: string; }) {
     const { onSearch } = props;
-    const [movieTitle, setMovieTitle] = useState("");
+    const [movieTitle, setMovieTitle] = useState(props.defaultValue || "");
+
+    useEffect(() => {
+        setMovieTitle(props.defaultValue || "");
+    }, [props.defaultValue]);
 
 
     const handleSubmit = (e: React.FormEvent) => {

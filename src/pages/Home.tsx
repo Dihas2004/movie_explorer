@@ -4,17 +4,21 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MovieResponse } from "../types/movieTypes";
 import SearchBar from "../components/SearchBar";
 import MovieCard from "../components/MovieCard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../app/store";
+import { MovieDetailPageActions } from "../providers/movieSlice";
 
 export default function Home() {
     const queryClient = useQueryClient();
-    const [page, setPage] = useState(1);
-    const [activeQuery, setActiveQuery] = useState("");
+    const dispatch = useDispatch();
+    const { activeQuery, page } = useSelector((state: RootState) => state.movie);
+
     const { data, isLoading, isError, error } = useQuery<MovieResponse, Error>({
         queryKey: ["movies", activeQuery, page],
         queryFn: () => searchMoviesByTitle(activeQuery, page),
         enabled: !!activeQuery.trim(),
-        staleTime: 5 * 60 * 1000,
-        gcTime: 5 * 60 * 1000,
+        staleTime: 0.2 * 60 * 1000,
+        gcTime: 0.2 * 60 * 1000,
         retry: false,
         refetchOnWindowFocus: false
     });
@@ -27,13 +31,14 @@ export default function Home() {
             <h1 className="home-title">Movies</h1>
 
             <SearchBar
+                defaultValue={activeQuery}
                 onSearch={async (query: string) => {
-                    setActiveQuery(query);
-                    setPage(1); 
+                    dispatch(MovieDetailPageActions.setActiveQuery(query));
+                    // dispatch(MovieDetailPageActions.setPage(1)); 
                     const queryKey = ["movies", query, 1];
                     const queryInfo = queryClient.getQueryState(queryKey);
 
-                    const isStale = !queryInfo ||(queryInfo.dataUpdatedAt && Date.now() - queryInfo.dataUpdatedAt > 5 * 60 * 1000);
+                    const isStale = !queryInfo ||(queryInfo.dataUpdatedAt && Date.now() - queryInfo.dataUpdatedAt > 0.2 * 60 * 1000);
 
                     const isFetching = queryInfo?.fetchStatus === "fetching";
 
@@ -43,9 +48,9 @@ export default function Home() {
                     } else if (isFetching) {
                         console.log("fetching in progress");
                     } 
-                    // else {
-                    //     console.log("using cache");
-                    // }
+                    else {
+                        console.log("using cache");
+                    }
                 }}
             />
 
@@ -67,11 +72,11 @@ export default function Home() {
                     </div>
 
                     <div className="pagination">
-                        <button disabled={!hasPrevPage} onClick={() => setPage(page - 1)}>
+                        <button disabled={!hasPrevPage} onClick={() => dispatch(MovieDetailPageActions.setPage(page - 1))}>
                             Previous
                         </button>
                         <span>Page {page}</span>
-                        <button disabled={!hasNextPage} onClick={() => setPage(page + 1)}>
+                        <button disabled={!hasNextPage} onClick={() => dispatch(MovieDetailPageActions.setPage(page + 1))}>
                             Next
                         </button>
                     </div>
