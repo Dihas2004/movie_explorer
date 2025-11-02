@@ -9,7 +9,6 @@ export async function searchMoviesByTitle(movieTitle: string,page: number): Prom
         if (!API_KEY) {
             throw new Error("API key is missing in the .env file");
         }
-        console.log(`Fetching from OMDb: ${movieTitle} (page ${page})`);
         const response = await fetch(`${BASE_URL}?s=${encodeURIComponent(movieTitle)}&page=${page}&apikey=${API_KEY}`);
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}`);
@@ -18,10 +17,6 @@ export async function searchMoviesByTitle(movieTitle: string,page: number): Prom
         if (data.Response === "False") {
             throw new Error("No results found.");
         }
-        // return {
-        //     movies: data.Search as Movie[],
-        //     totalResults: parseInt(data.totalResults, 10),
-        // };
         const movieResponseResult: MovieResponse = { movies: data.Search as Movie[], totalResults: Number(data.totalResults) };
         return movieResponseResult
     } catch (error) {

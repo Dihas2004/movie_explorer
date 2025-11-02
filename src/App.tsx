@@ -4,13 +4,26 @@ import './App.css';
 import Home from './pages/Home';
 import { Route, Routes } from 'react-router-dom';
 import MovieDetails from './pages/MovieDetails';
+import NavBar from './components/NavBar';
+import ProtectedRoute from './auth/ProtectedRoute';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/movie/:imdbID" element={<MovieDetails/>} />
-    </Routes>
+    <>
+      <Routes>
+        <Route
+          path="/"
+          element={<ProtectedRoute>
+            <NavBar/>
+            <Home />
+          </ProtectedRoute>} />
+        <Route
+          path="/movie/:imdbID"
+          element={<ProtectedRoute>
+            <MovieDetails />
+          </ProtectedRoute>} />
+      </Routes>
+    </>
   );
 }
 

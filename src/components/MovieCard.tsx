@@ -2,7 +2,8 @@ import { Movie } from "../types/movieTypes";
 import "../index.css"; 
 import { useNavigate } from "react-router-dom";
 
-export default function MovieCard({ movie }: { movie: Movie }) {
+export default function MovieCard(props: { movie: Movie }) {
+    const {movie} = props;
     const navigate = useNavigate();
 
     const handleClick = () => {
@@ -11,8 +12,12 @@ export default function MovieCard({ movie }: { movie: Movie }) {
     return (
         <div className="movie-card" onClick={handleClick}>
             <img
-                src={movie.Poster !== "N/A" ? movie.Poster : "/no-poster.png"}
+                src={movie.Poster !== "N/A" ? movie.Poster.replace("http://", "https://") : "/no-poster.jpg"}
                 alt={movie.Title}
+                onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/no-poster.jpg";
+                }}
             />
             <div className="movie-card-content">
                 <h3 className="movie-card-title">{movie.Title}</h3>

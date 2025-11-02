@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMovieDetails } from "../api/omdb-api";
 import { Movie } from "../types/movieTypes";
+import MovieDetailsCard from "../components/MovieDetailsCard";
 
 export default function MovieDetails() {
     const { imdbID } = useParams<{ imdbID: string }>();
@@ -35,24 +36,9 @@ export default function MovieDetails() {
             <button onClick={() => navigate(-1)} className="back-button">
                 Back
             </button>
-
-            <div className="movie-details">
-                <img
-                    src={movie.Poster !== "N/A" ? movie.Poster : "/no-poster.png"}
-                    alt={movie.Title}
-                    className="movie-poster"
-                />
-                <div className="movie-info">
-                    <h2>{movie.Title}</h2>
-                    <p><strong>Year:</strong> {movie.Year}</p>
-                    <p><strong>Genre:</strong> {movie.Genre}</p>
-                    <p><strong>Director:</strong> {movie.Director}</p>
-                    <p><strong>Actors:</strong> {movie.Actors}</p>
-                    <p><strong>Runtime:</strong> {movie.Runtime}</p>
-                    <p><strong>IMDB Rating:</strong> {movie.imdbRating}</p>
-                    <p><strong>Plot:</strong> {movie.Plot}</p>
-                </div>
-            </div>
+            <MovieDetailsCard 
+                movie={movie} 
+            />
         </div>
     );
 }

@@ -8,21 +8,32 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from "react-redux";
 import { store } from './app/store';
+import { Auth0Provider } from "@auth0/auth0-react";
 
 const queryClient = new QueryClient();
+
+const domain = process.env.REACT_APP_AUTH0_DOMAIN!;
+const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID!;
+const redirectUri = window.location.origin;
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <QueryClientProvider client={queryClient}>
-    <Provider store={store}>
-      <BrowserRouter>
-        <App/>
-      </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </Provider>
-  </QueryClientProvider>
+  <Auth0Provider
+    domain={domain}
+    clientId={clientId}
+    authorizationParams={{ redirect_uri: redirectUri }}
+  >
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <App/>
+        </BrowserRouter>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </Provider>
+    </QueryClientProvider>
+  </Auth0Provider>
   
 );
 

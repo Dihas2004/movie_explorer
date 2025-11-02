@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { searchMoviesByTitle } from "../api/omdb-api";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MovieResponse } from "../types/movieTypes";
@@ -17,8 +16,8 @@ export default function Home() {
         queryKey: ["movies", activeQuery, page],
         queryFn: () => searchMoviesByTitle(activeQuery, page),
         enabled: !!activeQuery.trim(),
-        staleTime: 0.2 * 60 * 1000,
-        gcTime: 0.2 * 60 * 1000,
+        staleTime: 5 * 60 * 1000,
+        gcTime: 5 * 60 * 1000,
         retry: false,
         refetchOnWindowFocus: false
     });
@@ -34,22 +33,13 @@ export default function Home() {
                 defaultValue={activeQuery}
                 onSearch={async (query: string) => {
                     dispatch(MovieDetailPageActions.setActiveQuery(query));
-                    // dispatch(MovieDetailPageActions.setPage(1)); 
                     const queryKey = ["movies", query, 1];
                     const queryInfo = queryClient.getQueryState(queryKey);
-
-                    const isStale = !queryInfo ||(queryInfo.dataUpdatedAt && Date.now() - queryInfo.dataUpdatedAt > 0.2 * 60 * 1000);
-
+                    const isStale = !queryInfo ||(queryInfo.dataUpdatedAt && Date.now() - queryInfo.dataUpdatedAt > 5 * 60 * 1000);
                     const isFetching = queryInfo?.fetchStatus === "fetching";
 
                     if (isStale && !isFetching) {
-                        console.log("refetching from network");
                         await queryClient.invalidateQueries({ queryKey });
-                    } else if (isFetching) {
-                        console.log("fetching in progress");
-                    } 
-                    else {
-                        console.log("using cache");
                     }
                 }}
             />
