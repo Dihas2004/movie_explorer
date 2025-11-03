@@ -10,7 +10,7 @@ export default function MovieDetailsCard(props: {movie: Movie}) {
             <div className="poster-section">
                 <h2 className="movie-title">{movie.Title}</h2>
                 <img
-                    src={movie.Poster !== "N/A" ? movie.Poster.replace("http://", "https://") : "/no-poster.jpg"}
+                    src={movie.Poster !== "N/A" ? movie.Poster : "/no-poster.jpg"}
                     alt={movie.Title}
                     className="movie-poster"
                     onError={(e) => {

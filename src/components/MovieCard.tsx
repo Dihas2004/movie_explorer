@@ -12,7 +12,7 @@ export default function MovieCard(props: { movie: Movie }) {
     return (
         <div className="movie-card" onClick={handleClick}>
             <img
-                src={movie.Poster !== "N/A" ? movie.Poster.replace("http://", "https://") : "/no-poster.jpg"}
+                src={movie.Poster !== "N/A" ? movie.Poster : "/no-poster.jpg"}
                 alt={movie.Title}
                 onError={(e) => {
                     const img = e.currentTarget;
