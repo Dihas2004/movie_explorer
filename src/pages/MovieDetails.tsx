@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getMovieDetails } from "../api/omdb-api";
+import { getMovieDetails } from "../api/omdbApi";
 import { Movie } from "../types/movieTypes";
 import MovieDetailsCard from "../components/MovieDetailsCard";
 

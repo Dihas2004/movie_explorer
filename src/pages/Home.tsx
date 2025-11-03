@@ -1,4 +1,4 @@
-import { searchMoviesByTitle } from "../api/omdb-api";
+import { searchMoviesByTitle } from "../api/omdbApi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MovieResponse } from "../types/movieTypes";
 import SearchBar from "../components/SearchBar";
