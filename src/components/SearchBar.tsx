@@ -4,10 +4,6 @@ export default function SearchBar(props: { onSearch: (query: string) => void; de
     const { onSearch, defaultValue } = props;
     const [movieTitle, setMovieTitle] = useState(defaultValue || "");
 
-    useEffect(() => {
-        setMovieTitle(props.defaultValue || "");
-    }, [props.defaultValue]);
-
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
