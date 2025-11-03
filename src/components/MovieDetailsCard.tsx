@@ -14,8 +14,10 @@ export default function MovieDetailsCard(props: {movie: Movie}) {
                     alt={movie.Title}
                     className="movie-poster"
                     onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = "/no-poster.jpg";
+                        const img = e.currentTarget;
+                        if (img.dataset.fallbackApplied) return;
+                        img.dataset.fallbackApplied = "true";
+                        img.src = "/no-poster.jpg";
                     }}
                 />
             </div>
