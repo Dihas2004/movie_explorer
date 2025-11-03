@@ -9,6 +9,8 @@ export default function SearchBar(props: { onSearch: (query: string) => void; de
         e.preventDefault();
         if (movieTitle.trim()) {
             onSearch(movieTitle);
+        }else {
+            onSearch("")
         }
     };
 
