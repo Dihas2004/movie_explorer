@@ -12,15 +12,10 @@ const initialState: MovieState = {
 
 function setActiveQuery(state: MovieState, action: PayloadAction<string>){
     state.activeQuery = action.payload;
-    state.page = 1;
 }
 
 function setPage(state: MovieState, action: PayloadAction<number>){
     state.page = action.payload;
-}
-
-function resetMovieState() {
-    return initialState;
 }
 
 const movieSlice = createSlice({
@@ -28,8 +23,7 @@ const movieSlice = createSlice({
     initialState,
     reducers: {
         setActiveQuery,
-        setPage,
-        resetMovieState,
+        setPage
     },
 });
 

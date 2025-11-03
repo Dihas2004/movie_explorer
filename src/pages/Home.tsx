@@ -33,6 +33,7 @@ export default function Home() {
                 defaultValue={activeQuery}
                 onSearch={async (query: string) => {
                     dispatch(MovieDetailPageActions.setActiveQuery(query));
+                    dispatch(MovieDetailPageActions.setPage(1));
                     const queryKey = ["movies", query, 1];
                     const queryInfo = queryClient.getQueryState(queryKey);
                     const isStale = !queryInfo ||(queryInfo.dataUpdatedAt && Date.now() - queryInfo.dataUpdatedAt > 5 * 60 * 1000);
