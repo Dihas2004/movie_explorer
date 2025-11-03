@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 export default function SearchBar(props: { onSearch: (query: string) => void; defaultValue?: string; }) {
-    const { onSearch } = props;
-    const [movieTitle, setMovieTitle] = useState(props.defaultValue || "");
+    const { onSearch, defaultValue } = props;
+    const [movieTitle, setMovieTitle] = useState(defaultValue || "");
 
     useEffect(() => {
         setMovieTitle(props.defaultValue || "");
